@@ -10,13 +10,17 @@ import Navbar from "../components/navbar/Navbar";
 type AdminPageLayoutProps = {
   children: React.ReactNode;
   title?: string;
+  subtitle?: string;
   setToggle: React.Dispatch<React.SetStateAction<string>>;
+  setHeader: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export default function AdminPageLayout({
   children,
   title = "หน้าหลัก",
+  subtitle,
   setToggle,
+  setHeader,
 }: AdminPageLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
@@ -31,12 +35,17 @@ export default function AdminPageLayout({
         onClose={closeSidebar}
         currentPath={pathname}
         setToggle={setToggle}
+        setHeader={setHeader}
       />
 
       {/* Main content */}
       <div className="flex min-w-0 flex-1 flex-col lg:justify-center">
         {/* Header */}
-        <HeaderBar onMenuClick={openSidebar} title={title} />
+        <HeaderBar
+          onMenuClick={openSidebar}
+          title={title}
+          subtitle={subtitle}
+        />
 
         {/* Content */}
         <main className="flex-1 overflow-auto">

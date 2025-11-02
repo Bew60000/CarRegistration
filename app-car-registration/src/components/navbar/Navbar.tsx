@@ -8,15 +8,16 @@ import {
   navigationItems,
   quickActionItems,
 } from "../../constants/NavbarItems";
-import UserSection from "./navber-detail/UserSection";
-import Navigation from "./navber-detail/Navigation";
-import HeaderNavbar from "./navber-detail/HeaderNavbar";
+import HeaderNavbar from "./navbar-detail/HeaderNavbar";
+import Navigation from "./navbar-detail/Navigation";
+import UserSection from "./navbar-detail/UserSection";
 
 type SidebarProp = {
   isOpen: boolean;
   onClose: () => void;
   currentPath: string;
   setToggle: React.Dispatch<React.SetStateAction<string>>;
+  setHeader: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export default function Navbar({
@@ -24,6 +25,7 @@ export default function Navbar({
   onClose,
   currentPath,
   setToggle,
+  setHeader,
 }: SidebarProp) {
   const { user, logout } = useAuthStore();
   const router = useRouter();
@@ -60,6 +62,7 @@ export default function Navbar({
           adminItems={adminItems}
           currentPath={currentPath}
           setToggle={setToggle}
+          setHeader={setHeader}
         />
 
         {/* User section */}

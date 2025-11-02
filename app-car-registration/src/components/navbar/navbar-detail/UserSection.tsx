@@ -13,7 +13,7 @@ export default function UserSection({ user, handleLogout }: UserSectionProps) {
     <div className="flex-shrink-0 border-t border-gray-200/60 p-4">
       <div className="mb-3 rounded-xl bg-gradient-to-r from-gray-50 to-blue-50 p-4">
         <div className="mb-3 flex items-center gap-3">
-          <div className="relative flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg">
+          <div className="relative flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-red-500 to-yellow-600 shadow-lg">
             <span className="text-lg font-bold text-white">
               {user?.username?.charAt(0).toUpperCase() || "U"}
             </span>
@@ -27,7 +27,7 @@ export default function UserSection({ user, handleLogout }: UserSectionProps) {
               <span
                 className={cn(
                   "inline-block h-2 w-2 rounded-full",
-                  user?.role === "admin" ? "bg-orange-500" : "bg-blue-500",
+                  user?.role === "admin" ? "bg-orange-500" : "bg-yellow-500",
                 )}
               ></span>
               {user?.role === "admin" ? "ผู้ดูแลระบบ" : "เจ้าหน้าที่"}
@@ -37,7 +37,7 @@ export default function UserSection({ user, handleLogout }: UserSectionProps) {
       </div>
       <Button
         onClick={handleLogout}
-        className="group flex w-full items-center gap-3 rounded-xl p-3 font-medium text-gray-700 transition-all duration-200 hover:bg-red-50 hover:text-red-600 hover:shadow-md"
+        className="group flex w-full items-center justify-start gap-3 rounded-xl p-6 font-medium text-gray-700 transition-all duration-200 hover:bg-red-50 hover:text-red-600 hover:shadow-md"
       >
         <div className="rounded-lg bg-gray-100 p-2 transition-all duration-200 group-hover:bg-red-100">
           <LogOut className="h-4 w-4 flex-shrink-0 group-hover:text-red-600" />

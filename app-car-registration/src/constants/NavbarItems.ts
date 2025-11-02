@@ -23,12 +23,12 @@ export const navigationItems: NavigationItem[] = [
 ];
 
 export const fileItems: NavigationItem[] = [
-  { icon: FileText, label: "จัดการไฟล์ PDF", toggleNumber: "4" },
+  { icon: FileText, label: "จัดการไฟล์ PDF", toggleNumber: "6" },
 ];
 
 export const quickActionItems: NavigationItem[] = [
-  { icon: Car, label: "เพิ่มรถใหม่", toggleNumber: "5" },
-  { icon: AlertTriangle, label: "เพิ่มการฝ่าฝืน", toggleNumber: "6" },
+  { icon: Car, label: "เพิ่มรถใหม่", toggleNumber: "4" },
+  { icon: AlertTriangle, label: "เพิ่มการฝ่าฝืน", toggleNumber: "5" },
 ];
 
 export const adminItems: NavigationItem[] = [

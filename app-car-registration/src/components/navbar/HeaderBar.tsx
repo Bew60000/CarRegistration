@@ -7,9 +7,14 @@ import { Button } from "../ui/button";
 type HeaderBarProps = {
   onMenuClick: () => void;
   title: string;
+  subtitle?: string;
 };
 
-export default function HeaderBar({ onMenuClick, title }: HeaderBarProps) {
+export default function HeaderBar({
+  onMenuClick,
+  title,
+  subtitle,
+}: HeaderBarProps) {
   const { user } = useAuthStore();
   return (
     <header className="flex-shrink-0 border-b border-gray-200/80 bg-white/95 px-4 py-2 shadow-sm backdrop-blur-xl sm:px-6 sm:py-3">
@@ -26,18 +31,13 @@ export default function HeaderBar({ onMenuClick, title }: HeaderBarProps) {
             <h1 className="truncate bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-xl font-bold text-transparent sm:text-2xl">
               {title}
             </h1>
+            {subtitle && (
+              <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
+            )}
           </div>
         </div>
 
         <div className="flex flex-shrink-0 items-center gap-3 sm:gap-4">
-          {/* Notifications */}
-          {/* <Button className="group relative rounded-xl p-2.5 text-gray-600 transition-all duration-200 hover:scale-105 hover:bg-orange-50 hover:text-orange-600">
-            <AlertTriangle className="h-5 w-5 group-hover:animate-pulse" />
-            <span className="absolute -top-1 -right-1 h-3 w-3 animate-pulse rounded-full bg-gradient-to-r from-red-500 to-orange-500">
-              <span className="absolute inset-0 animate-ping rounded-full bg-red-500 opacity-75"></span>
-            </span>
-          </Button> */}
-
           {/* User menu */}
           <div className="flex items-center gap-3 rounded-full bg-gradient-to-r from-gray-50 to-blue-50 px-4 py-2 transition-all duration-200 hover:shadow-md">
             <div className="relative flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-red-500 to-red-600 shadow-lg">
