@@ -1,49 +1,54 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import usePostVehicle from "../../../hooks/vehicle/usePostVehicle";
+import useVehicle from "../../../hooks/vehicle/useVehicle";
 
 export default function FormAddVehicle() {
-  const router = useRouter();
-  const [formData, setFormData] = useState({
-    licensePlate: "",
-    province: "",
-    brand: "",
-    model: "",
-    year: new Date().getFullYear(),
-    color: "",
-    fuelType: "",
-    ownerName: "",
-    ownerType: "INDIVIDUAL",
-    usageType: "PERSONAL",
+  const { fetchVehicles } = useVehicle();
+  const { formData, handleChange, handleSubmit } = usePostVehicle({
+    fetchVehicles,
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const vehicleBrands = [
+    { id: "B1", name: "Toyota" },
+    { id: "B2", name: "Honda" },
+    { id: "B3", name: "Nissan" },
+    { id: "B4", name: "Mazda" },
+    { id: "B5", name: "Mitsubishi" },
+    { id: "B6", name: "Other" },
+  ];
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (
-      !formData.licensePlate ||
-      !formData.brand ||
-      !formData.model ||
-      !formData.ownerName
-    ) {
-      alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
-      return;
-    }
-    console.log("🚗 Vehicle Registered:", formData);
-    alert(`ลงทะเบียนรถ ${formData.licensePlate} สำเร็จ!`);
-    router.push("/vehicles");
-  };
+  const vehicleColors = [
+    { id: "C1", name: "ขาว" },
+    { id: "C2", name: "ดำ" },
+    { id: "C3", name: "เงิน" },
+    { id: "C4", name: "เทา" },
+    { id: "C5", name: "แดง" },
+    { id: "C6", name: "น้ำเงิน" },
+    { id: "C7", name: "เขียว" },
+    { id: "C8", name: "ทอง" },
+    { id: "C9", name: "อื่นๆ" },
+  ];
 
-  const handleCancel = () => {
-    if (confirm("ต้องการยกเลิกการลงทะเบียนหรือไม่?")) router.push("/vehicles");
-  };
+  const vehicleFuels = [
+    { id: "F1", name: "GASOLINE" },
+    { id: "F2", name: "DIESEL" },
+    { id: "F3", name: "HYBRID" },
+    { id: "F4", name: "ELECTRIC" },
+  ];
+
+  const vehicle_model =[
+    {id: "C1", name: "Toyota Corolla Altis"},
+    {id: "C2", name: "Honda Civic"},
+    {id: "C3", name: "Honda City"},
+    {id: "C4", name: "Isuzu D-Max"},
+    {id: "C5", name: "Toyota Hilux Revo"},
+    {id: "C6", name: "Toyota Hilux Revo"},
+    {id: "C5", name: "Toyota Hilux Revo"},
+    {id: "C5", name: "Toyota Hilux Revo"},
+    {id: "C5", name: "Toyota Hilux Revo"},
+    {id: "C5", name: "Toyota Hilux Revo"},
+  ];
 
   return (
     <div className="mx-auto mt-8 max-w-11/12 rounded-xl bg-white p-6 shadow-lg">
@@ -51,7 +56,16 @@ export default function FormAddVehicle() {
         ลงทะเบียนรถใหม่
       </h2>
       <p className="text-md mb-6 font-medium text-gray-700">ข้อมูลรถยนต์</p>
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          // ส่ง JSON ตามตัวอย่าง
+          const payload = { ...formData };
+          console.log("Payload to send:", JSON.stringify(payload));
+          handleSubmit(e); // ถ้ามี hook handleSubmit อยู่แล้ว
+        }}
+        className="space-y-5"
+      >
         {/* ข้อมูลรถ */}
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-4">
@@ -61,8 +75,8 @@ export default function FormAddVehicle() {
               </label>
               <input
                 type="text"
-                name="licensePlate"
-                value={formData.licensePlate}
+                name="vehicle_plate"
+                value={formData.vehicle_plate}
                 onChange={handleChange}
                 placeholder="เช่น กข-1234"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
@@ -74,8 +88,8 @@ export default function FormAddVehicle() {
               <label className="mb-1 block text-sm font-medium">จังหวัด</label>
               <input
                 type="text"
-                name="province"
-                value={formData.province}
+                name="vehicle_plate_province"
+                value={formData.vehicle_plate_province}
                 onChange={handleChange}
                 placeholder="เช่น สงขลา"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
@@ -89,24 +103,17 @@ export default function FormAddVehicle() {
                 ยี่ห้อรถ*
               </label>
               <select
-                name="brand"
+                name="vehicle_brand_id"
                 aria-label="ยี่ห้อรถ"
-                value={formData.brand}
+                value={formData.vehicle_brand_id}
                 onChange={handleChange}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
                 required
               >
                 <option value="">เลือกยี่ห้อ</option>
-                {[
-                  "Toyota",
-                  "Honda",
-                  "Nissan",
-                  "Mazda",
-                  "Mitsubishi",
-                  "Other",
-                ].map((b) => (
-                  <option key={b} value={b}>
-                    {b}
+                {vehicleBrands.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.name}
                   </option>
                 ))}
               </select>
@@ -116,8 +123,8 @@ export default function FormAddVehicle() {
               <label className="mb-1 block text-sm font-medium">รุ่นรถ*</label>
               <input
                 type="text"
-                name="model"
-                value={formData.model}
+                name="vehicle_model_id"
+                value={formData.vehicle_model_id}
                 onChange={handleChange}
                 placeholder="เช่น Camry"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
@@ -130,78 +137,56 @@ export default function FormAddVehicle() {
                 ประเภทของรถ
               </label>
               <select
-                name="ownerType"
+                name="vehicle_type_id"
                 aria-label="ประเภทของรถ"
-                value={formData.ownerType}
+                value={formData.vehicle_type_id}
                 onChange={handleChange}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
               >
-                <option value="INDIVIDUAL">รถยนต์</option>
-                <option value="CORPORATE">รถมอไซต์</option>
+                <option value="VT1">รถยนต์</option>
+                <option value="VT2">รถมอไซต์</option>
               </select>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1 block text-sm font-medium">
-                ปีที่ผลิต
-              </label>
-              <input
-                title="ปีที่ผลิต"
-                type="number"
-                name="year"
-                value={formData.year}
-                onChange={handleChange}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
-              />
-            </div>
-            <div>
               <label className="mb-1 block text-sm font-medium">สีรถ</label>
               <select
-                name="color"
+                name="vehicle_color_id"
                 aria-label="สีรถ"
-                value={formData.color}
+                value={formData.vehicle_color_id}
                 onChange={handleChange}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
               >
                 <option value="">เลือกสี</option>
-                {[
-                  "ขาว",
-                  "ดำ",
-                  "เงิน",
-                  "เทา",
-                  "แดง",
-                  "น้ำเงิน",
-                  "เขียว",
-                  "ทอง",
-                  "อื่นๆ",
-                ].map((c) => (
-                  <option key={c} value={c}>
-                    {c}
+                {vehicleColors.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
                   </option>
                 ))}
               </select>
             </div>
-          </div>
 
-          <div>
-            <label className="mb-1 block text-sm font-medium">
-              ประเภทเชื้อเพลิง
-            </label>
-            <select
-              name="fuelType"
-              aria-label="เลือกประเภทเชื้อเพลิง"
-              value={formData.fuelType}
-              onChange={handleChange}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
-            >
-              {["", "GASOLINE", "DIESEL", "HYBRID", "ELECTRIC"].map((f) => (
-                <option key={f} value={f}>
-                  {f || "เลือกประเภทเชื้อเพลิง"}
-                </option>
-              ))}
-            </select>
+            <div>
+              <label className="mb-1 block text-sm font-medium">
+                ประเภทเชื้อเพลิง
+              </label>
+              <select
+                name="vehicle_fuel_id"
+                aria-label="เลือกประเภทเชื้อเพลิง"
+                value={formData.vehicle_fuel_id}
+                onChange={handleChange}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
+              >
+                <option value="">เลือกประเภทเชื้อเพลิง</option>
+                {vehicleFuels.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {f.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
@@ -212,14 +197,14 @@ export default function FormAddVehicle() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="mb-1 block text-sm font-medium">
-                ชื่อเจ้าของรถ*
+                รหัสพนักงาน*
               </label>
               <input
                 type="text"
-                name="ownerName"
-                value={formData.ownerName}
+                name="emp_id"
+                value={formData.emp_id}
                 onChange={handleChange}
-                placeholder="ชื่อเจ้าของรถ"
+                placeholder="รหัสพนักงาน"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
                 required
               />
@@ -230,14 +215,14 @@ export default function FormAddVehicle() {
                 ประเภทการใช้งาน
               </label>
               <select
-                name="usageType"
+                name="usage_id"
                 aria-label="ประเภทการใช้งาน"
-                value={formData.usageType}
+                value={formData.usage_id}
                 onChange={handleChange}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
               >
-                <option value="PERSONAL">รถส่วนบุคคล</option>
-                <option value="COMPANY">รถขนส่งของบริษัท</option>
+                <option value="U1">รถส่วนบุคคล</option>
+                <option value="U2">รถขนส่งของบริษัท</option>
               </select>
             </div>
           </div>
@@ -247,7 +232,6 @@ export default function FormAddVehicle() {
         <div className="flex justify-between pt-6">
           <button
             type="button"
-            onClick={handleCancel}
             className="rounded-lg border bg-gray-100 px-5 py-2 font-medium text-gray-700 transition hover:bg-gray-200"
           >
             ยกเลิก

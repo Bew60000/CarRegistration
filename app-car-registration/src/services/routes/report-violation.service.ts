@@ -8,7 +8,7 @@ export const getAllReportViolations = async (): Promise<
   TypeReportViolations[]
 > => {
   try {
-    const response = await api.get<TypeReportViolations[]>("/report_violation");
+    const response = await api.get<TypeReportViolations[]>("/report-violation");
     return response.data;
   } catch (error) {
     console.error("Error fetching report violations:", error);

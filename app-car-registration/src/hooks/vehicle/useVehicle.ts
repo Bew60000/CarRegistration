@@ -1,53 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { TypeVehicles } from "../../types/vehicle";
+import { getAllVehicles } from "../../services/routes/vehicle.service";
 
 export default function useVehicle() {
-  const baseDate = new Date("2024-01-01");
+  const [vehicles, setVehicles] = useState<TypeVehicles[]>([]);
 
-  const vehicles = [
-    {
-      id: "1",
-      licensePlate: "กง-1234",
-      brand: "Toyota",
-      model: "Camry",
-      year: 2023,
-      color: "ขาว",
-      ownerName: "นายสมชาย ใจดี",
-      status: "ACTIVE",
-      registrationDate: new Date(baseDate.getTime() + 86400000),
-      fuel: "Diesel",
-    },
-  ];
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
-
-  // Filter vehicles by query and status
-  const filteredVehicles = vehicles.filter((v) => {
-    const matchQuery =
-      v.licensePlate.includes(searchQuery) ||
-      v.brand.includes(searchQuery) ||
-      v.model.includes(searchQuery) ||
-      v.ownerName.includes(searchQuery);
-    const matchStatus =
-      filterStatus === "all" || v.status === filterStatus.toUpperCase();
-    return matchQuery && matchStatus;
-  });
-
-  const stats = {
-    total: vehicles.length,
-    active: vehicles.filter((v) => v.status === "ACTIVE").length,
-    expired: 0,
-    suspended: 0,
-    expiringSoon: 0,
+  const fetchVehicles = async () => {
+    try {
+      const data = await getAllVehicles();
+      setVehicles(data);
+    } catch (error) {
+      console.error("Failed to fetch vehicles:", error);
+    }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchVehicles();
+    };
+    fetchData();
+  }, []);
+
   return {
-    stats,
-    searchQuery,
-    setSearchQuery,
-    filterStatus,
-    setFilterStatus,
-    filteredVehicles,
     vehicles,
+    fetchVehicles,
   };
 }

@@ -1,6 +1,7 @@
 export type ReportViolationData = {
   report_id: number;
-  vehicle_id: number;
+  vehicle_plate: string;
+  vehicle_plate_province: string;
   emp_id: string;
   full_name: string;
   position: string;
@@ -13,7 +14,8 @@ export type ReportViolationData = {
 };
 
 export type ReportViolation = {
-  vehicle_id: number;
+  vehicle_plate: string;
+  vehicle_plate_province: string;
   emp_id: string;
   full_name: string;
   position: string;

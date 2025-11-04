@@ -16,20 +16,20 @@ export default function AdminPage() {
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.replace("/login");
-      return;
-    }
-  }, [isAuthenticated, router]);
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     router.replace("/login");
+  //     return;
+  //   }
+  // }, [isAuthenticated, router]);
 
-  if (!isAuthenticated) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-gray-50 text-gray-700">
-        <div className="animate-pulse bg-white p-6">Loading...</div>
-      </div>
-    );
-  }
+  // if (!isAuthenticated) {
+  //   return (
+  //     <div className="flex h-screen w-full items-center justify-center bg-gray-50 text-gray-700">
+  //       <div className="animate-pulse bg-white p-6">Loading...</div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-white to-gray-50 text-black">

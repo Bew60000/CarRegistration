@@ -2,38 +2,26 @@
 
 import { Plus } from "lucide-react";
 import VehicleTable from "./vehicle-detail/VehicleTable";
-import VehicleStats from "./vehicle-detail/VehicleStats";
-import VehicleSearch from "./vehicle-detail/VehicleSearch";
 import useVehicle from "../../hooks/vehicle/useVehicle";
 
 export default function Vehicle() {
-  const {
-    stats,
-    searchQuery,
-    setSearchQuery,
-    filterStatus,
-    setFilterStatus,
-    filteredVehicles,
-    vehicles,
-  } = useVehicle();
+  const { vehicles } = useVehicle();
 
   return (
     <div className="space-y-6">
-      <VehicleStats stats={stats} />
+      {/* <VehicleStats stats={stats} /> */}
 
       {/* === Search & Filter === */}
-      <VehicleSearch
+      {/* <VehicleSearch
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         filterStatus={filterStatus}
         setFilterStatus={setFilterStatus}
-      />
+      /> */}
 
       {/* === Vehicles Display === */}
       <div className="rounded-xl border bg-white shadow">
-        {filteredVehicles.length > 0 && (
-          <VehicleTable vehicles={filteredVehicles} />
-        )}
+        {vehicles.length > 0 && <VehicleTable vehicles={vehicles} />}
       </div>
 
       {/* === Add New Vehicle === */}

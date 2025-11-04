@@ -3,7 +3,7 @@ import api from "../api";
 
 export const getAllVehicles = async (): Promise<TypeVehicles[]> => {
   try {
-    const response = await api.get<TypeVehicles[]>("/vehicles");
+    const response = await api.get<TypeVehicles[]>("/vehicle");
     return response.data;
   } catch (error) {
     console.error("Error fetching vehicles:", error);
@@ -11,14 +11,10 @@ export const getAllVehicles = async (): Promise<TypeVehicles[]> => {
   }
 };
 
-export const getOneVehicles = async (id: number): Promise<TypeVehicles> => {
+export const getOneVehicle = async (id: number): Promise<TypeVehicles> => {
   try {
-    const response = await api.get<TypeVehicles[]>("/vehicles", {
-      headers: {
-        vehicle_id: id,
-      },
-    });
-    return response.data[0];
+    const response = await api.get<TypeVehicles>(`/vehicle/${id}`);
+    return response.data;
   } catch (error) {
     console.error("Error fetching vehicle:", error);
     throw error;
@@ -32,18 +28,16 @@ export const postVehicle = async (
     const response = await api.post<TypePostVehicle>("/vehicle", vehicle);
     return response.data;
   } catch (error) {
-    console.error("Error post vehicle:", error);
+    console.error("Error posting vehicle:", error);
     throw error;
   }
 };
 
 export const deleteVehicle = async (id: number) => {
   try {
-    await api.delete("/vehicle", {
-      headers: { vehicle_id: id },
-    });
+    await api.delete(`/vehicle/${id}`);
   } catch (error) {
-    console.error("Error deleted vehicle:", error);
+    console.error("Error deleting vehicle:", error);
     throw error;
   }
 };

@@ -13,7 +13,8 @@ export class ReportVilolationService {
     const reportViolation: ReportViolationData[] = await this.dataSource.query(
       `SELECT
         r.report_id,
-        r.vehicle_id,
+        v.vehicle_plate,
+        v.vehicle_plate_province,
         r.emp_id,
         r.full_name,
         e.position,
@@ -24,6 +25,7 @@ export class ReportVilolationService {
         r.report_date,
         p.punishment_name
       FROM report_violation r
+      left join vehicle v on r.vehicle_id = v.vehicle_id
       LEFT JOIN employee e ON r.emp_id = e.emp_id
       LEFT JOIN violations vlt ON r.violation_id = vlt.violation_id
       LEFT JOIN punishments p ON r.punishment_id = p.punishment_id;`,
@@ -31,7 +33,8 @@ export class ReportVilolationService {
 
     return reportViolation.map((row) => ({
       report_id: row.report_id,
-      vehicle_id: row.vehicle_id,
+      vehicle_plate: row.vehicle_plate,
+      vehicle_plate_province: row.vehicle_plate_province,
       emp_id: row.emp_id,
       full_name: row.full_name,
       position: row.position,
@@ -48,7 +51,8 @@ export class ReportVilolationService {
     const rows: ReportViolationData[] = await this.dataSource.query(
       `SELECT
         r.report_id,
-        r.vehicle_id,
+        v.vehicle_plate,
+        v.vehicle_plate_province,
         r.emp_id,
         r.full_name,
         e.position,
@@ -59,6 +63,7 @@ export class ReportVilolationService {
         r.report_date,
         p.punishment_name
       FROM report_violation r
+      left join vehicle v on r.vehicle_id = v.vehicle_id
       LEFT JOIN employee e ON r.emp_id = e.emp_id
       LEFT JOIN violations vlt ON r.violation_id = vlt.violation_id
       LEFT JOIN punishments p ON r.punishment_id = p.punishment_id
@@ -70,7 +75,8 @@ export class ReportVilolationService {
 
     const row = rows[0];
     return {
-      vehicle_id: row.vehicle_id,
+      vehicle_plate: row.vehicle_plate,
+      vehicle_plate_province: row.vehicle_plate_province,
       emp_id: row.emp_id,
       full_name: row.full_name,
       position: row.position,

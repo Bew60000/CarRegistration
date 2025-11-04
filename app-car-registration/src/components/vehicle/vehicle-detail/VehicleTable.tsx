@@ -1,26 +1,14 @@
 import React from "react";
 import { Car, Edit, Eye, PauseCircle, PlayCircle, Trash2 } from "lucide-react";
-
-interface Vehicle {
-  id: string;
-  licensePlate: string;
-  brand: string;
-  model: string;
-  year: number;
-  color: string;
-  ownerName: string;
-  status: string;
-  registrationDate: Date;
-  fuel: string;
-}
+import { TypeVehicles } from "../../../types/vehicle";
 
 interface VehicleTableProps {
-  vehicles: Vehicle[];
-  onEdit?: (vehicle: Vehicle) => void;
-  onView?: (vehicle: Vehicle) => void;
-  onSuspend?: (vehicle: Vehicle) => void;
-  onReactivate?: (vehicle: Vehicle) => void;
-  onDelete?: (vehicle: Vehicle) => void;
+  vehicles: TypeVehicles[];
+  onEdit?: (vehicle: TypeVehicles) => void;
+  onView?: (vehicle: TypeVehicles) => void;
+  onSuspend?: (vehicle: TypeVehicles) => void;
+  onReactivate?: (vehicle: TypeVehicles) => void;
+  onDelete?: (vehicle: TypeVehicles) => void;
   className?: string;
 }
 
@@ -43,13 +31,13 @@ export default function VehicleTable({
               ทะเบียนรถ
             </th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">
-              ยี่ห้อ / รุ่น
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">
-              เจ้าของ
+              ยี่ห้อ
             </th>
             <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600">
-              สถานะ
+              รุ่น
+            </th>
+            <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600">
+              ประเภทการใช้งาน
             </th>
             <th className="px-4 py-3 text-center text-sm font-semibold text-gray-600">
               เชื้อเพลิง
@@ -70,35 +58,21 @@ export default function VehicleTable({
               <td className="px-4 py-3 font-medium text-gray-800">
                 <div className="flex items-center gap-2">
                   <Car className="h-4 w-4 text-blue-500" />
-                  {v.licensePlate}
+                  {v.vehicle_plate}
                 </div>
               </td>
 
-              <td className="px-4 py-3 text-gray-700">
-                {v.brand} {v.model} ({v.year})
+              <td className="px-4 py-3 text-gray-700">{v.vehicle_brand}</td>
+
+              <td className="px-4 py-3 text-center text-gray-700">
+                {v.vehicle_model}
               </td>
 
-              <td className="px-4 py-3 text-gray-700">{v.ownerName}</td>
+              <td className="px-4 py-3 text-center text-gray-700">{v.usage}</td>
 
-              <td className="px-4 py-3 text-center">
-                <span
-                  className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${
-                    v.status === "ACTIVE"
-                      ? "bg-green-100 text-green-700"
-                      : v.status === "SUSPENDED"
-                        ? "bg-red-100 text-red-700"
-                        : "bg-gray-100 text-gray-600"
-                  }`}
-                >
-                  {v.status === "ACTIVE"
-                    ? "ใช้งานได้"
-                    : v.status === "SUSPENDED"
-                      ? "ระงับ"
-                      : "หมดอายุ"}
-                </span>
+              <td className="px-4 py-3 text-center text-gray-700">
+                {v.vehicle_fuel}
               </td>
-
-              <td className="px-4 py-3 text-center text-gray-700">{v.fuel}</td>
 
               {/* Action Buttons */}
               <td className="px-4 py-3 text-center">
@@ -117,24 +91,6 @@ export default function VehicleTable({
                   >
                     <Edit className="h-4 w-4" />
                   </button>
-
-                  {v.status === "ACTIVE" ? (
-                    <button
-                      onClick={() => onSuspend?.(v)}
-                      className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100 hover:text-red-600"
-                      title="ระงับการใช้งาน"
-                    >
-                      <PauseCircle className="h-4 w-4" />
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => onReactivate?.(v)}
-                      className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100 hover:text-green-600"
-                      title="เปิดใช้งานอีกครั้ง"
-                    >
-                      <PlayCircle className="h-4 w-4" />
-                    </button>
-                  )}
 
                   <button
                     onClick={() => onDelete?.(v)}

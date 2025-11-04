@@ -113,7 +113,8 @@ export class VehicleService {
     usage_id,
     vehicle_register_date
   )
-  VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9)
+  VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, GETDATE() 
+  )
 `;
 
     await this.dataSource.query(query, [
@@ -126,8 +127,8 @@ export class VehicleService {
       dto.vehicle_plate, // @6
       dto.vehicle_plate_province, // @7
       dto.usage_id, // @8
-      dto.vehicle_register_date, // @9
     ]);
+    console.log('🚗 Creating vehicle with data:', dto);
   }
 
   //Delete Vehicle

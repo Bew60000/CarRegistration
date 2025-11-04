@@ -1,37 +1,27 @@
 "use client";
 
 import { FileText, Filter, Plus } from "lucide-react";
-import useViolation from "../../hooks/violation/useViolation";
 import { Button } from "../ui/button";
-import StatCard from "./violation-detail/StatCard";
+// import StatCard from "./violation-detail/StatCard";
+import useViolation from "../../hooks/violation/useViolation";
 
 export default function Violation() {
-  const {
-    loadingViolations,
-    violations,
-    stats,
-    searchQuery,
-    setSearchQuery,
-    filterStatus,
-    setFilterStatus,
-    filteredViolations,
-    router,
-  } = useViolation();
+  const { violations } = useViolation();
 
   return (
     <div className="space-y-6">
       {/* Loading State */}
-      {loadingViolations && (
+      {/* {
         <div className="py-20 text-center">
           <div className="mx-auto mb-4 animate-spin text-blue-500">
             <FileText className="h-10 w-10" />
           </div>
           <p className="text-gray-600">กำลังโหลดข้อมูล...</p>
         </div>
-      )}
+      } */}
 
       {/* Statistics Cards */}
-      {!loadingViolations && violations.length > 0 && (
+      {/* {violations.length > 0 && (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           <StatCard
             label="ทั้งหมด"
@@ -52,7 +42,7 @@ export default function Violation() {
             icon={<Plus />}
           />
         </div>
-      )}
+      )} */}
 
       {/* Search and Filter */}
       <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-md">
@@ -62,8 +52,8 @@ export default function Violation() {
             <input
               type="text"
               placeholder="ค้นหาทะเบียน, ประเภท, สถานที่, เจ้าหน้าที่..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              // value={searchQuery}
+              // onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full rounded-lg border border-gray-300 py-3 pr-3 pl-10 focus:ring-2 focus:ring-blue-500"
             />
             <FileText className="absolute top-3.5 left-3 h-5 w-5 text-gray-400" />
@@ -71,9 +61,9 @@ export default function Violation() {
 
           {/* Filter */}
           <select
-            value={filterStatus}
+            // value={filterStatus}
             aria-label="สถานะ"
-            onChange={(e) => setFilterStatus(e.target.value)}
+            // onChange={(e) => setFilterStatus(e.target.value)}
             className="rounded-lg border border-gray-300 bg-white px-3 py-3 focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">ทุกสถานะ</option>
@@ -84,12 +74,12 @@ export default function Violation() {
 
         {/* Summary */}
         <div className="mt-4 text-sm text-gray-600">
-          ผลลัพธ์: {filteredViolations.length} / {violations.length} รายการ
+          ผลลัพธ์: {violations.length} รายการ
         </div>
       </div>
 
       {/* Table / List */}
-      {filteredViolations.length > 0 ? (
+      {violations.length > 0 ? (
         <div className="rounded-xl border border-gray-200 bg-white p-6">
           <h3 className="mb-4 text-lg font-semibold text-gray-800">
             ประวัติการกระทำความผิด
@@ -99,6 +89,12 @@ export default function Violation() {
               <tr>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">
                   ทะเบียนรถ
+                </th>
+                <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">
+                  จังหวัด
+                </th>
+                <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">
+                  ประเภทการกระทำความผิด
                 </th>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-600">
                   ประเภทใบสั่ง
@@ -115,16 +111,18 @@ export default function Violation() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {filteredViolations.map((v) => (
-                <tr key={v.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2">{v.licensePlate}</td>
-                  <td className="px-4 py-2">{v.violationType}</td>
-                  <td className="px-4 py-2">{v.officerName}</td>
+              {violations.map((v) => (
+                <tr key={v.report_id} className="hover:bg-gray-50">
+                  <td className="px-4 py-2">{v.vehicle_plate}</td>
+                  <td className="px-4 py-2">{v.vehicle_plate_province}</td>
+                  <td className="px-4 py-2">{v.violation_name}</td>
+                  <td className="px-4 py-2">{v.punishment_name}</td>
+                  <td className="px-4 py-2">{v.full_name}</td>
                   <td className="px-4 py-2 text-center font-medium text-red-600">
-                    {v.department}
+                    {v.division}
                   </td>
                   <td className="px-4 py-2 text-center text-gray-600">
-                    {v.violationDate.toLocaleDateString("th-TH")}
+                    {new Date(v.report_date).toLocaleDateString("th-TH")}
                   </td>
                 </tr>
               ))}
@@ -136,7 +134,7 @@ export default function Violation() {
           <FileText className="mx-auto mb-4 h-10 w-10 text-gray-400" />
           <p className="text-gray-600">ไม่พบใบสั่งจราจร</p>
           <Button
-            onClick={() => router.push("/violations/new")}
+            // onClick={() => router.push("/violations/new")}
             className="mt-4 inline-flex items-center rounded-lg bg-blue-600 px-5 py-3 text-white transition hover:bg-blue-700"
           >
             <Plus className="mr-2 h-5 w-5" />

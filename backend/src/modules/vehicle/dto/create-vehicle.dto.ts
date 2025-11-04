@@ -35,8 +35,4 @@ export class CreateVehicleDto {
 
   @IsString()
   vehicle_plate_province: string;
-
-  @IsString()
-  @IsNotEmpty()
-  vehicle_register_date: Date;
 }
