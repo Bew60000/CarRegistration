@@ -1,72 +1,22 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
 import { FileText, Filter, Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
+import useViolation from "../../hooks/violation/useViolation";
+import { Button } from "../ui/button";
+import StatCard from "./violation-detail/StatCard";
 
 export default function Violation() {
-  const router = useRouter();
-
-  // 🔹 ข้อมูล mock ตัวอย่าง
-  const [violations] = useState([
-    {
-      id: "1",
-      violationType: "ขับรถเกินความเร็วที่กำหนด",
-      description:
-        "ขับรถเกินความเร็วที่กำหนด 80 กม./ชม. ในเขตจำกัดความเร็ว 50 กม./ชม.",
-      licensePlate: "กง-1234",
-      vehicleId: "1",
-      location: "ถนนสุขุมวิท กรุงเทพฯ",
-      department: "IT",
-      violationDate: new Date("2024-01-15"),
-      fineAmount: 1000,
-      status: "PENDING",
-      officerId: "P001",
-      officerName: "จ.ส.อ.สมชาย ใจดี",
-    },
-    {
-      id: "2",
-      violationType: "จอดรถในที่ห้ามจอด",
-      description: "จอดรถขวางทางเข้า-ออก อาคารสำนักงาน",
-      licensePlate: "ขข-5678",
-      vehicleId: "2",
-      location: "ถนนพระราม 9 กรุงเทพฯ",
-      department: "CDM",
-      violationDate: new Date("2024-02-10"),
-      fineAmount: 500,
-      status: "PAID",
-      officerId: "P002",
-      officerName: "ร.ต.อ.วุฒิชัย แก้วใส",
-    },
-  ]);
-
-  const [loadingViolations, setLoadingViolations] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
-
-  // 🔹 กรองข้อมูล
-  const filteredViolations = useMemo(() => {
-    return violations.filter((v) => {
-      const matchSearch =
-        v.licensePlate.includes(searchQuery) ||
-        v.violationType.includes(searchQuery) ||
-        v.location.includes(searchQuery) ||
-        v.officerName.includes(searchQuery);
-
-      const matchStatus =
-        filterStatus === "all" || v.status.toLowerCase() === filterStatus;
-
-      return matchSearch && matchStatus;
-    });
-  }, [violations, searchQuery, filterStatus]);
-
-  const stats = useMemo(() => {
-    return {
-      total: violations.length,
-      pending: violations.filter((v) => v.status === "PENDING").length,
-      paid: violations.filter((v) => v.status === "PAID").length,
-    };
-  }, [violations]);
+  const {
+    loadingViolations,
+    violations,
+    stats,
+    searchQuery,
+    setSearchQuery,
+    filterStatus,
+    setFilterStatus,
+    filteredViolations,
+    router,
+  } = useViolation();
 
   return (
     <div className="space-y-6">
@@ -185,46 +135,15 @@ export default function Violation() {
         <div className="rounded-xl border border-gray-200 bg-gray-50 p-12 text-center">
           <FileText className="mx-auto mb-4 h-10 w-10 text-gray-400" />
           <p className="text-gray-600">ไม่พบใบสั่งจราจร</p>
-          <button
+          <Button
             onClick={() => router.push("/violations/new")}
             className="mt-4 inline-flex items-center rounded-lg bg-blue-600 px-5 py-3 text-white transition hover:bg-blue-700"
           >
             <Plus className="mr-2 h-5 w-5" />
             สร้างใบสั่งใหม่
-          </button>
+          </Button>
         </div>
       )}
-    </div>
-  );
-}
-
-// ✅ Component ย่อย: Stat Card
-function StatCard({
-  label,
-  value,
-  color,
-  icon,
-}: {
-  label: string;
-  value: string | number;
-  color: string;
-  icon: React.ReactNode | string;
-}) {
-  return (
-    <div
-      className={`rounded-xl border border-${color}-200 bg-${color}-50 p-4 transition hover:shadow-md`}
-    >
-      <div className="flex items-center justify-between">
-        <div>
-          <div className={`text-2xl font-bold text-${color}-700`}>{value}</div>
-          <div className={`text-sm text-${color}-600`}>{label}</div>
-        </div>
-        <div
-          className={`rounded-lg p-3 bg-${color}-200 text-${color}-700 text-lg`}
-        >
-          {typeof icon === "string" ? icon : icon}
-        </div>
-      </div>
     </div>
   );
 }
