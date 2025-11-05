@@ -1,10 +1,8 @@
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { TypeReportViolations } from "../../types/report-violation";
 import { getAllReportViolations } from "../../services/routes/report-violation.service";
 
 export default function useViolation() {
-  const router = useRouter();
   const [violations, setViolations] = useState<TypeReportViolations[]>([]);
 
   const fetchViolations = async () => {
@@ -25,6 +23,6 @@ export default function useViolation() {
 
   return {
     violations,
-    router,
+    fetchViolations,
   };
 }

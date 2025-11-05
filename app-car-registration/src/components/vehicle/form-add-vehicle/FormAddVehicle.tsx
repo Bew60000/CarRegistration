@@ -5,7 +5,7 @@ import useVehicle from "../../../hooks/vehicle/useVehicle";
 
 export default function FormAddVehicle() {
   const { fetchVehicles } = useVehicle();
-  const { formData, handleChange, handleSubmit } = usePostVehicle({
+  const { formData, handleChange, handleSubmitVehicleForm } = usePostVehicle({
     fetchVehicles,
   });
 
@@ -37,17 +37,31 @@ export default function FormAddVehicle() {
     { id: "F4", name: "ELECTRIC" },
   ];
 
-  const vehicle_model =[
-    {id: "C1", name: "Toyota Corolla Altis"},
-    {id: "C2", name: "Honda Civic"},
-    {id: "C3", name: "Honda City"},
-    {id: "C4", name: "Isuzu D-Max"},
-    {id: "C5", name: "Toyota Hilux Revo"},
-    {id: "C6", name: "Toyota Hilux Revo"},
-    {id: "C5", name: "Toyota Hilux Revo"},
-    {id: "C5", name: "Toyota Hilux Revo"},
-    {id: "C5", name: "Toyota Hilux Revo"},
-    {id: "C5", name: "Toyota Hilux Revo"},
+  const vehicle_model = [
+    { id: "CR1", name: "Toyota Corolla Altis" },
+    { id: "CR2", name: "Honda Civic" },
+    { id: "CR3", name: "Honda City" },
+    { id: "CR4", name: "Isuzu D-Max" },
+    { id: "CR5", name: "Toyota Hilux Revo" },
+    { id: "CR6", name: "Honda CR-V" },
+    { id: "CR7", name: "Toyota Fortuner" },
+    { id: "M1", name: "Honda Wave 110i" },
+    { id: "M2", name: "Honda Click 125i" },
+    { id: "M3", name: "Honda PCX 160" },
+    { id: "M4", name: "Yamaha Grand Filano" },
+    { id: "M5", name: "Yamaha Aerox 155" },
+    { id: "M6", name: "TYamaha NMAX" },
+    { id: "M7", name: "Suzuki Smash 115" },
+  ];
+
+  const usage = [
+    { id: "U1", name: "รถส่วนบุคคล" },
+    { id: "U2", name: "รถขนส่งบริษัท" },
+  ];
+
+  const vehicleType = [
+    { id: "VT1", name: "รถยนต์" },
+    { id: "VT2", name: "รถจักรยานยนต์" },
   ];
 
   return (
@@ -62,7 +76,7 @@ export default function FormAddVehicle() {
           // ส่ง JSON ตามตัวอย่าง
           const payload = { ...formData };
           console.log("Payload to send:", JSON.stringify(payload));
-          handleSubmit(e); // ถ้ามี hook handleSubmit อยู่แล้ว
+          handleSubmitVehicleForm(e); // ถ้ามี hook handleSubmit อยู่แล้ว
         }}
         className="space-y-5"
       >
@@ -121,15 +135,20 @@ export default function FormAddVehicle() {
 
             <div>
               <label className="mb-1 block text-sm font-medium">รุ่นรถ*</label>
-              <input
-                type="text"
+              <select
                 name="vehicle_model_id"
+                aria-label="รุ่นรถ"
                 value={formData.vehicle_model_id}
                 onChange={handleChange}
-                placeholder="เช่น Camry"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
-                required
-              />
+              >
+                <option value="">เลือกรุ่นรถ</option>
+                {vehicle_model.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
@@ -143,8 +162,12 @@ export default function FormAddVehicle() {
                 onChange={handleChange}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
               >
-                <option value="VT1">รถยนต์</option>
-                <option value="VT2">รถมอไซต์</option>
+                <option value="">เลือกประเภทรถ</option>
+                {vehicleType.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -221,8 +244,12 @@ export default function FormAddVehicle() {
                 onChange={handleChange}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
               >
-                <option value="U1">รถส่วนบุคคล</option>
-                <option value="U2">รถขนส่งของบริษัท</option>
+                <option value="">เลือกประเภทการใช้งาน</option>
+                {usage.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

@@ -1,79 +1,117 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import usePostViolation from "../../../hooks/violation/usePostViolation";
+import useViolation from "../../../hooks/violation/useViolation";
 
 export default function FormTrafficViolation() {
-  const router = useRouter();
-  const [formData, setFormData] = useState({
-    licensePlate: "",
-    violationType: "",
-    description: "",
-    location: "",
-    violationDate: new Date().toISOString().split("T")[0],
-    fineAmount: "",
-    officerName: "",
-    notes: "",
-  });
+  const { fetchViolations } = useViolation();
 
-  const violationOptions = [
-    "ขับรถเร็วเกินกำหนด",
-    "จอดรถในที่ห้ามจอด",
-    "ฝ่าไฟแดง",
-    "ไม่คาดเข็มขัดนิรภัย",
-    "ใช้โทรศัพท์ขณะขับรถ",
-    "ขับรถในขณะเมาสุรา",
-    "ไม่หยุดรถให้คนเดินเท้า",
-    "ขับรถย้อนศร",
-    "ขับรถตัดหน้าอันตราย",
-    "อื่นๆ",
+  const { formData, handleChange, handleSubmitViolationForm } =
+    usePostViolation({ fetchViolations });
+
+  const violation = [
+    { id: "VT1", name: "ขับรถเร็วกว่ากำหนด" },
+    { id: "VT2", name: "จอดรถในที่ไม่ควรจอด" },
+    { id: "VT3", name: "ไม่สวมหมวกนิรภัย" },
   ];
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (
-      !formData.licensePlate ||
-      !formData.violationType ||
-      !formData.description ||
-      !formData.location
-    ) {
-      alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
-      return;
-    }
-
-    alert(`บันทึกใบสั่งจราจรสำหรับรถ ${formData.licensePlate} สำเร็จ!`);
-    router.push("/violations");
-  };
-
-  const handleCancel = () => {
-    if (confirm("ต้องการยกเลิกการบันทึกใบสั่งจราจรหรือไม่?"))
-      router.push("/violations");
-  };
+  const punishment = [
+    { id: "PM1", name: "ตักเตือนด้วยวาจา" },
+    { id: "PM2", name: "ตัักเตือนด้วยหนังสือ" },
+    { id: "PM3", name: "ลดค่าจ้าง" },
+    { id: "PM4", name: "พักงานโดยไม่จ่ายค่าจ้าง" },
+    { id: "PM5", name: "งดขึ้นเงินเดือนหรือ งดจ่ายเงินโบนัสประจำปี" },
+    { id: "PM6", name: "เลิกจ้างโดยไม่จ่ายค่าชดเชย" },
+  ];
 
   return (
     <div className="mx-auto max-w-11/12 rounded-xl bg-white p-6 shadow-lg">
       <h2 className="mb-6 text-2xl font-semibold text-gray-800">
         บันทึกใบสั่งจราจร
       </h2>
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmitViolationForm} className="space-y-5">
         <div>
           <label className="mb-1 block text-sm font-medium">ทะเบียนรถ*</label>
           <input
             type="text"
-            name="licensePlate"
-            value={formData.licensePlate}
+            name="vehicle_plate"
+            value={formData.vehicle_plate}
             onChange={handleChange}
             placeholder="เช่น กข-1234"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-red-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">จังหวัด*</label>
+          <input
+            type="text"
+            name="vehicle_plate_province"
+            value={formData.vehicle_plate_province}
+            onChange={handleChange}
+            placeholder="เช่น สงขลา"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-red-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">รหัสพนักงาน*</label>
+          <input
+            type="text"
+            name="emp_id"
+            value={formData.emp_id}
+            onChange={handleChange}
+            placeholder="เช่น 0001"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-red-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">ชื่อ-สกุล*</label>
+          <input
+            type="text"
+            name="full_name"
+            value={formData.full_name}
+            onChange={handleChange}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-red-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">ฝ่าย*</label>
+          <input
+            type="text"
+            name="department"
+            value={formData.department}
+            onChange={handleChange}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-red-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">แผนก*</label>
+          <input
+            type="text"
+            name="division"
+            value={formData.division}
+            onChange={handleChange}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-red-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">ตำแหน่ง*</label>
+          <input
+            type="text"
+            name="position"
+            value={formData.position}
+            onChange={handleChange}
             className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-red-500"
             required
           />
@@ -84,9 +122,49 @@ export default function FormTrafficViolation() {
             ประเภทการฝ่าฝืน*
           </label>
           <select
-            name="violationType"
+            name="violation_id"
             aria-label="ประเภทการฝ่าฝืน"
-            value={formData.violationType}
+            value={formData.violation_id}
+            onChange={handleChange}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
+            required
+          >
+            <option value="">ประเภทการฝ่าฝืน</option>
+            {violation.map((v) => (
+              <option key={v.id} value={v.id}>
+                {v.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">บทลงโทษ*</label>
+          <select
+            name="punishment_id"
+            aria-label="บทลงโทษ"
+            value={formData.punishment_id}
+            onChange={handleChange}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-green-500"
+            required
+          >
+            <option value="">บทลงโทษ</option>
+            {punishment.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* <div>
+          <label className="mb-1 block text-sm font-medium">
+            ประเภทการฝ่าฝืน*
+          </label>
+          <select
+            name="violation_name"
+            aria-label="ประเภทการฝ่าฝืน"
+            value={formData.violation_name}
             onChange={handleChange}
             className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-red-500"
             required
@@ -98,7 +176,7 @@ export default function FormTrafficViolation() {
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
 
         <div>
           <label className="mb-1 block text-sm font-medium">
@@ -116,84 +194,9 @@ export default function FormTrafficViolation() {
           />
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium">
-            สถานที่เกิดเหตุ*
-          </label>
-          <input
-            type="text"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            placeholder="เช่น ถนนพระราม 4 ตัดกับถนนสีลม"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-red-500"
-            required
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="mb-1 block text-sm font-medium">
-              วันที่เกิดเหตุ*
-            </label>
-            <input
-              type="date"
-              name="violationDate"
-              title="วันที่เกิดเหตุ"
-              value={formData.violationDate}
-              onChange={handleChange}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-red-500"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="mb-1 block text-sm font-medium">
-              จำนวนเงินค่าปรับ (บาท)
-            </label>
-            <input
-              type="number"
-              name="fineAmount"
-              value={formData.fineAmount}
-              onChange={handleChange}
-              placeholder="เช่น 500"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-red-500"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="mb-1 block text-sm font-medium">
-            ชื่อเจ้าหน้าที่ผู้จับกุม
-          </label>
-          <input
-            type="text"
-            name="officerName"
-            value={formData.officerName}
-            onChange={handleChange}
-            placeholder="ชื่อเจ้าหน้าที่"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-red-500"
-          />
-        </div>
-
-        <div>
-          <label className="mb-1 block text-sm font-medium">
-            หมายเหตุเพิ่มเติม
-          </label>
-          <textarea
-            name="notes"
-            value={formData.notes}
-            onChange={handleChange}
-            placeholder="หมายเหตุหรือข้อมูลเพิ่มเติม"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-red-500"
-            rows={2}
-          />
-        </div>
-
         <div className="flex justify-between pt-6">
           <button
             type="button"
-            onClick={handleCancel}
             className="rounded-lg border bg-gray-100 px-5 py-2 font-medium text-gray-700 transition hover:bg-gray-200"
           >
             ยกเลิก

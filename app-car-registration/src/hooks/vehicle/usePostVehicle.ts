@@ -34,7 +34,7 @@ export default function usePostVehicle({ fetchVehicles }: Props) {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmitVehicleForm = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -70,7 +70,7 @@ export default function usePostVehicle({ fetchVehicles }: Props) {
     setFormData,
     loading,
     handleChange,
-    handleSubmit,
+    handleSubmitVehicleForm,
     error,
     success,
   };

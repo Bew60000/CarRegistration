@@ -36,6 +36,8 @@ export class CreateReportViolationDto {
   division: number;
   violation_id: string;
   description: string;
-  report_date: string; // 'YYYY-MM-DD'
-  punishment_id?: string;
+  report_date: string;
+  punishment_id: string;
+  vehicle_plate: string;
+  vehicle_plate_province: string;
 }

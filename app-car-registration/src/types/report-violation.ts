@@ -14,15 +14,14 @@ export type TypeReportViolations = {
 };
 
 export type TypePostReportViolation = {
-  vehicle_plate: string;
-  vehicle_plate_province: string;
   emp_id: string;
   full_name: string;
-  position_id: string;
-  department_id: string;
-  division_id: string;
-  violation_id: string;
+  vehicle_plate: string;
+  vehicle_plate_province: string;
+  position: string;
+  department: string;
+  division: string;
   description: string;
-  report_date: string;
+  violation_id: string;
   punishment_id: string;
 };

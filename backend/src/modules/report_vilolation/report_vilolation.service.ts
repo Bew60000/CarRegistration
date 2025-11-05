@@ -13,13 +13,13 @@ export class ReportVilolationService {
     const reportViolation: ReportViolationData[] = await this.dataSource.query(
       `SELECT
         r.report_id,
-        v.vehicle_plate,
-        v.vehicle_plate_province,
+        r.vehicle_plate,
+        r.vehicle_plate_province,
         r.emp_id,
         r.full_name,
-        e.position,
-        e.department,
-        e.division,
+        r.position,
+        r.department,
+        r.division,
         vlt.violation_name,
         r.description,
         r.report_date,
@@ -90,46 +90,43 @@ export class ReportVilolationService {
   }
 
   async create(dto: CreateReportViolationDto): Promise<void> {
-    // ตรวจสอบค่าที่จำเป็น
     if (
-      !dto.vehicle_id ||
       !dto.emp_id ||
       !dto.full_name ||
       !dto.violation_id ||
-      !dto.description ||
-      !dto.report_date
+      !dto.description
     ) {
       throw new Error('Missing required fields');
     }
 
     const query = `
       INSERT INTO report_violation (
-        report_id,
-        vehicle_id,
         emp_id,
         full_name,
+        vehicle_plate,
+        vehicle_plate_province,
         position,
         department,
         division,
         violation_id,
+        punishment_id,
         description,
-        report_date,
-        punishment_id
+        report_date
       )
-      VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9)
+      VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, GETDATE())
     `;
 
     await this.dataSource.query(query, [
-      dto.vehicle_id, // @0
-      dto.emp_id, // @1
-      dto.full_name, // @2
-      dto.position, // @3
-      dto.department, // @4
-      dto.division, // @5
-      dto.violation_id, // @6
-      dto.description, // @7
-      dto.report_date, // @8
-      dto.punishment_id || null, // @9
+      dto.emp_id,
+      dto.full_name,
+      dto.vehicle_plate,
+      dto.vehicle_plate_province,
+      dto.position,
+      dto.department,
+      dto.division,
+      dto.violation_id,
+      dto.punishment_id,
+      dto.description,
     ]);
   }
 

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { TypeVehicles } from "../../types/vehicle";
-import { getAllVehicles } from "../../services/routes/vehicle.service";
+import {
+  deleteVehicle,
+  getAllVehicles,
+} from "../../services/routes/vehicle.service";
 
 export default function useVehicle() {
   const [vehicles, setVehicles] = useState<TypeVehicles[]>([]);
@@ -14,6 +17,16 @@ export default function useVehicle() {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteVehicle(id);
+      fetchVehicles();
+      console.log(`Vehicle with id ${id} deleted successfully`);
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       await fetchVehicles();
@@ -24,5 +37,6 @@ export default function useVehicle() {
   return {
     vehicles,
     fetchVehicles,
+    handleDelete,
   };
 }

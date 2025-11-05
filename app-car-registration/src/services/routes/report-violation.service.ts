@@ -36,7 +36,7 @@ export const getOneReportViolation = async (
 };
 
 export const postReportViolation = async (
-  report_violation: TypeReportViolations,
+  report_violation: TypePostReportViolation,
 ): Promise<TypePostReportViolation> => {
   try {
     const response = await api.post<TypePostReportViolation>(

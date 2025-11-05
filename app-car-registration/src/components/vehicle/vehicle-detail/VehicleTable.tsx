@@ -1,6 +1,7 @@
-import React from "react";
-import { Car, Edit, Eye, PauseCircle, PlayCircle, Trash2 } from "lucide-react";
+import  { useEffect } from "react";
+import { Car, Edit, Eye, Trash2 } from "lucide-react";
 import { TypeVehicles } from "../../../types/vehicle";
+import useVehicle from "../../../hooks/vehicle/useVehicle";
 
 interface VehicleTableProps {
   vehicles: TypeVehicles[];
@@ -21,6 +22,12 @@ export default function VehicleTable({
   onDelete,
   className = "",
 }: VehicleTableProps) {
+  const { handleDelete, fetchVehicles } = useVehicle();
+
+  useEffect(() => {
+    fetchVehicles();
+  }, [fetchVehicles]);
+
   return (
     <div className={`overflow-x-auto ${className}`}>
       <table className="min-w-full divide-y divide-gray-200">
@@ -93,7 +100,7 @@ export default function VehicleTable({
                   </button>
 
                   <button
-                    onClick={() => onDelete?.(v)}
+                    onClick={() => handleDelete(v.id)}
                     className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100 hover:text-red-700"
                     title="ลบข้อมูล"
                   >
